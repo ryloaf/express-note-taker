@@ -1,11 +1,12 @@
 const express = require('express');
 const path = require('path');
-const html_routes = require('./routes/html_routes')
-const api_routes = require('./routes/api_routes')
+const html_routes = require('./routes/html-routes')
+const api_routes = require('./routes/api-routes')
 const PORT = 3001;
-
+// set the port
 const app = express();
 
+// express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
