@@ -1,19 +1,52 @@
 const express = require('express');
 const path = require('path');
-const html_routes = require('./routes/html-routes')
-const api_routes = require('./routes/api-routes')
+const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+
 const PORT = process.env.PORT || 3001;
-// set the port
 const app = express();
 
-// express middleware
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 app.use(express.static('public'));
 
-app.use(html_routes());
-app.use(api_routes());
+// HTML routes
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, './public/index.html');
+    res.sendFile(indexPath, (err) => {
+        if (err) {
+            console.error('Error sending index.html:', err);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+});
+
+app.get('/notes', (req, res) => {
+    const indexPath = path.join(__dirname, './public/notes.html');
+    res.sendFile(indexPath, (err) => {
+        if (err) {
+            console.error('Error sending index.html:', err);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+});
+
+// API routes
+app.get('/api/notes', async (req, res) => {
+    const indexPath = path.join(__dirname, './public/notes.html');
+    const dbJson = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
+    const newFeedback = {
+        title: req.body.title,
+        text: req.body.text,
+        id: uuidv4(),
+    };
+    dbJson.push(newFeedback);
+    fs.writeFileSync('db/db.json', JSON.stringify(dbJson));
+});
+
+
+// code to delete notes goes here
 
 
 app.listen(PORT, () => {
