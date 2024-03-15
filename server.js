@@ -1,8 +1,10 @@
+// required dependencies
 const express = require('express');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
+// setting up server
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -11,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('public'));
 
-// HTML routes
+// HTML route for 'index.html'
 app.get('/', (req, res) => {
     const indexPath = path.join(__dirname, './public/index.html');
     res.sendFile(indexPath, (err) => {
@@ -22,6 +24,7 @@ app.get('/', (req, res) => {
     });
 });
 
+// HTML route for 'notes.html'
 app.get('/notes', (req, res) => {
     const indexPath = path.join(__dirname, './public/notes.html');
     res.sendFile(indexPath, (err) => {
@@ -30,6 +33,18 @@ app.get('/notes', (req, res) => {
             res.status(500).send('Internal Server Error');
         }
     });
+});
+
+app.post('/notes', (req, res) => {
+    const dbJson = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
+    const newNote = {
+        title: req.body.title,
+        text: req.body.text,
+        id: uuidv4(),
+    };
+    dbJson.push(newNote);
+    fs.writeFilesync('db/db.json', JSON.stringify(dbJson));
+    res.json(newNote);
 });
 
 // API routes
@@ -44,9 +59,6 @@ app.get('/api/notes', async (req, res) => {
     dbJson.push(newFeedback);
     fs.writeFileSync('db/db.json', JSON.stringify(dbJson));
 });
-
-
-// code to delete notes goes here
 
 
 app.listen(PORT, () => {
