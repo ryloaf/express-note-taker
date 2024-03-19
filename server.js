@@ -1,7 +1,6 @@
 // required dependencies
 const express = require('express');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
 // setting up server
@@ -40,7 +39,6 @@ app.post('/notes', (req, res) => {
     const newNote = {
         title: req.body.title,
         text: req.body.text,
-        id: uuidv4(),
     };
     dbJson.push(newNote);
     fs.writeFilesync('db/db.json', JSON.stringify(dbJson));
@@ -54,7 +52,6 @@ app.get('/api/notes', async (req, res) => {
     const newFeedback = {
         title: req.body.title,
         text: req.body.text,
-        id: uuidv4(),
     };
     dbJson.push(newFeedback);
     fs.writeFileSync('db/db.json', JSON.stringify(dbJson));
