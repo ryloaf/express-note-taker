@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+let noteData = require('./db/db.json')
 
 // setting up server
 const PORT = process.env.PORT || 3001;
@@ -34,27 +35,69 @@ app.get('/notes', (req, res) => {
     });
 });
 
-app.post('/notes', (req, res) => {
+app.get('/api/notes', (req, res) => res.json(noteData));
+
+app.post('/api/notes', (req, res) => {
+    const id = Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
     const dbJson = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
     const newNote = {
         title: req.body.title,
         text: req.body.text,
+        id: id,
     };
-    dbJson.push(newNote);
-    fs.writeFilesync('db/db.json', JSON.stringify(dbJson));
-    res.json(newNote);
-});
+    console.log(newNote);
 
-// API routes
-app.get('/api/notes', async (req, res) => {
-    const indexPath = path.join(__dirname, './public/notes.html');
-    const dbJson = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
-    const newFeedback = {
-        title: req.body.title,
-        text: req.body.text,
-    };
-    dbJson.push(newFeedback);
-    fs.writeFileSync('db/db.json', JSON.stringify(dbJson));
+      fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+        } else {
+          // Convert string into JSON object
+          const parsedNotes = JSON.parse(data);
+  
+          // Add a new note to the json file
+          parsedNotes.push(newNote);
+          //updates note data with changes to json file
+          noteData = parsedNotes;
+  
+          // Write updated notes back to the file
+          fs.writeFile(
+            './db/db.json',
+            JSON.stringify(parsedNotes, null, 4),
+            (writeErr) =>
+              writeErr
+                ? console.error(writeErr)
+                : console.info('updated notes')
+          );
+        }
+      });
+    });
+
+    app.delete('/api/notes/:id', (req, res) => {
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+        } else {
+          // Convert string into JSON object
+          let parsedNotes = JSON.parse(data);
+          parsedNotes = parsedNotes.filter(function(obj) {
+            return obj.id !== req.params.id;
+          });
+          noteData=parsedNotes;
+  
+          // Write updated notes back to the file
+          fs.writeFile(
+            './db/db.json',
+            JSON.stringify(parsedNotes, null, 4),
+            (writeErr) =>
+              writeErr
+                ? console.error(writeErr)
+                : console.info('updated notes')
+        
+            );
+        }
+    });
 });
 
 
