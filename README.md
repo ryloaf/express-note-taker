@@ -9,8 +9,9 @@
   1. Open integrated terminal with server.js.
   2. Enter 'node server.js' in the the command line.
   3. Click the server link presented in the terminal.
-  4. Click "Get Starter" to be directed to the notes page.
+  4. Click "Get Started" to be directed to the notes page.
   5. Write down your notes in the text box and click the "save" button.
+  6. If you'd like to delete a note, click the trash icon.
 
   ## Technologies
 
