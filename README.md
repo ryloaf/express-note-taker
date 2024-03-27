@@ -21,7 +21,7 @@
 
   ## Screenshots
   
-  <img width="1363" alt="express-note-taker" src="https://github.com/ryloaf/express-note-taker/assets/151485696/7fc78bac-2e76-4a43-a552-558b2ca28e6f">
+  <img width="1420" alt="Screen Shot 2024-03-27 at 1 57 58 PM" src="https://github.com/ryloaf/express-note-taker/assets/151485696/09ac7f2f-6032-4c5f-a8f1-a0a9c28a4ed4">
 
   ## Credits
   
