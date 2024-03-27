@@ -74,6 +74,7 @@ app.post('/api/notes', (req, res) => {
       });
     });
 
+    // Function to delete previously saved notes
     app.delete('/api/notes/:id', (req, res) => {
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
         if (err) {
@@ -85,8 +86,7 @@ app.post('/api/notes', (req, res) => {
             return obj.id !== req.params.id;
           });
           noteData=parsedNotes;
-  
-          // Write updated notes back to the file
+
           fs.writeFile(
             './db/db.json',
             JSON.stringify(parsedNotes, null, 4),
